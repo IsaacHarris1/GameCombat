@@ -57,11 +57,15 @@ void createCharacter(vector<master>& playerStatHolder){
     roll = roll + initiativeModifier;
     
     playerStatHolder.push_back(master(name,health,roll,initiativeModifier));
-   cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
     cout << "if you are done please press d, or press c to add more players!" << endl;
 }
 
+void combat(vector<master>& playerStatHolder){
+    cout << "You have begun combat please press d when done, or c to continue when prompted" << endl;
+}
 
 
 
@@ -91,12 +95,17 @@ cout << "Enter in player info, press d when prompted if done" << endl;
     });
   
   for(int i = 0; i < playerStatHolder.size(); i++){
+      cout << '\n';
       cout << "Name: " << playerStatHolder.at(i).getname() << endl;
       cout << "health: " << playerStatHolder.at(i).getHealth() << endl;
       cout << "roll w/ modifier: " << playerStatHolder.at(i).getRoll() << endl << endl;
   }
  
-    
+ cout << "Would you like to begin combat? type y for yes" << endl;
+ cin >> inputs;
+ if(inputs == "y"){
+     combat(playerStatHolder);
+ }
     
     return  0;
 }
