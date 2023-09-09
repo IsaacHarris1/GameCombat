@@ -17,6 +17,9 @@ class master{
         this -> initiativeModifier = initiativeModifier;
         this -> armorClass = armorClass;
     }
+void editHealth(int newHealth){
+    health = newHealth;
+}
 string getName() const{
     return name;
     }
@@ -48,6 +51,8 @@ int basicD20Roll(){
     return d_20;
     
 }
+
+//bool isAlive()
 
 void createCharacter(vector<master>& playerStatHolder){
     string name;
@@ -99,7 +104,7 @@ int diceRoll() {
     mt19937 rng(time(nullptr));
     string diceChoice;
     int diceConvert;
-    int diceRoll;
+    //int diceRoll;
     int amountRoll;
     int rollTotal = 0;
     cout << "what type of dice would you like me to roll? ex(d4)" << endl;
@@ -181,8 +186,8 @@ int diceRoll() {
 void combat(vector<master>& playerStatHolder){
     bool isInCombat = true;
     int playerSelect;
-    int diceRoll;
     int diceModifier;
+    int health;
     
     while(isInCombat){
         cout << "You have begun combat please press d when done, or c to continue when prompted" << endl;
@@ -201,15 +206,30 @@ void combat(vector<master>& playerStatHolder){
         cin >> diceModifier;
         d_20 += diceModifier;
         cout << "Total attack roll: " << d_20 << endl;
-        //enter kill statement here
+        
+        if(d_20 > playerStatHolder.at(playerSelect - 1).getArmorClass()){
+            cout << "You hit!" << endl;
+            
+            int newHealth = playerStatHolder.at(playerSelect - 1).getHealth() - diceRoll();
+            playerStatHolder.at(playerSelect - 1).editHealth(newHealth);
+        }
+        
+        if(d_20 <= playerStatHolder.at(playerSelect - 1).getArmorClass()){
+            cout << "You missed! Aim better next time" << endl;
+        }
+
+        if(playerStatHolder.at(playerSelect - 1).getHealth() <= 0){
+            
+            cout << "Opponent slain" << endl;
+        
         isInCombat = false;
+        }
     }
 }
 
 
 
 int main(){
-    diceRoll();
   string inputs = "a";
   vector<master> playerStatHolder;
   vector<int> initiativeHolder;
