@@ -47,6 +47,32 @@ int basicD20Roll(){
     
 }
 
+int inputValidation(){
+    int input;
+    while(true){
+        if(cin >> input){
+            break;
+        }
+        cout << "Invalid input try again" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    return input;
+}
+
+char inputCharValidation(){
+    char inputChar;
+    while(true){
+        if(cin >> inputChar){
+            break;
+        }
+        cout << "Not a character try again" << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+    }
+    return inputChar;
+}
+
 //bool isAlive()
 //edited for team creation and storing
 void createCharacter(vector<master>& playerStatHolder){
@@ -63,18 +89,13 @@ void createCharacter(vector<master>& playerStatHolder){
     getline(cin, name);
     
     cout << "Please enter player health " << endl;
-    cin >> health;
-    
-   // cout << "rolling a d20 for the player " << endl;
-    //roll = basicD20Roll();
+    health = inputValidation();
     
     cout << "Please enter the players intiative modifier" << endl;
-    cin >> initiativeModifier;
+    initiativeModifier = inputValidation();
     
     cout << "Please enter the players armorClass" << endl;
-    cin >> armorClass;
-    
-    //roll += initiativeModifier;
+    armorClass = inputValidation();
     
     playerStatHolder.push_back(master(name,health,initiativeModifier,armorClass));
     
@@ -84,53 +105,66 @@ void createCharacter(vector<master>& playerStatHolder){
 }
 
 int main(){
-  int choiceT = 0;
-  int choice = 0;
-  string choiceTstring;
-  string choiceString;
+  int selection = 0;
   string inputs = "a";
   vector<master> playerStatHolder;
   vector<int> initiativeHolder;
   
-cout << "Hello user, here are your options for the menu" << endl;
-cout << "1: Begin/Edit the players" << endl;
 
-cin >> choice;
+while(true){
+    cout << "Hello user, here are your options for the menu, select from the options below" << endl;
+    cout << "1: Begin/Edit the party" << endl;
+    cout << "2: Display the party" << endl;
+    cout << "5: Terminate program" << endl;
 
-while(atoi(choiceString.c_str()) == 0){
-    cin >> choiceString;
-
-choice = atoi(choiceString.c_str());
-    if(choice == 0){
-        cout << " That is not an option please try again." << endl;
-        cin >> choiceString;
+   int selection = inputValidation();
+    
+    
+    
+    
+     if(selection == 1){
+        bool editingParty = true;
+        
+        while(editingParty){
+           cout << "Enter in player info, press d when prompted if done" << endl;
+           createCharacter(playerStatHolder);   
+        
+              if(inputCharValidation() == 'd'){
+                  cout << "done! \n";
+                  editingParty = false;
+                }
+                
+              else if(inputCharValidation() == 'c'){
+                   continue;
+                }
+            }
+        }
+        
+    else if(selection == 2){
+      
+      if(playerStatHolder.size() == 0){
+          cout << "The party is currently empty, please press 1 to add" << endl;
+          cout << "\n \n \n \n \n";
+      }
+      else{
+          for(int i = 0; i < playerStatHolder.size(); i++){
+              cout << '\n';
+              cout << "Name: " << playerStatHolder.at(i).getName() << endl;
+              cout << "health: " << playerStatHolder.at(i).getHealth() << endl;
+              cout << "modifier: " << playerStatHolder.at(i).getInitiativeModifier() << endl;
+              cout << "Armor class: " << playerStatHolder.at(i).getArmorClass() << endl;
+              cout << "\n \n \n \n \n";
+          }
+        }
     }
-}
-  if(choice == 1){
-  
-cout << "Enter in player info, press d when prompted if done" << endl;
-  while(true){
-   createCharacter(playerStatHolder);   
-   cin >> inputs;
+    
+    else if(selection == 5){
+            cout << "Program terminated" << endl;
+            break;
+        }
 
-  if(inputs == "d"){
-      break;
-    }
-  if(inputs == "c"){
-       continue;
-  }
 }
-}
-if(inputs == "d"){
-  
-  for(int i = 0; i < playerStatHolder.size(); i++){
-      cout << '\n';
-      cout << "Name: " << playerStatHolder.at(i).getName() << endl;
-      cout << "health: " << playerStatHolder.at(i).getHealth() << endl;
-      cout << "modifier: " << playerStatHolder.at(i).getInitiativeModifier() << endl;
-      cout << "Armor class: " << playerStatHolder.at(i).getArmorClass() << endl;
-  }
-}
+
 
  return 0;
  
