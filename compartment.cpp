@@ -8,6 +8,10 @@
 
 using namespace std;
 
+void clearScreen(){
+    system("clear");
+}
+
 class master{
     public:
     master(const string name, const int health, const int initiativeModifier, const int armorClass){
@@ -40,7 +44,7 @@ int getArmorClass() const{
 
 class Enemies : public master {
 public:
-    Enemies(const string name, const int health,const int armorClass, const int initiativeModifier, const int initiativeHolder)
+    Enemies(const string name, int health,const int armorClass, const int initiativeModifier, const int initiativeHolder)
         : master(name,health,initiativeModifier,armorClass){
             this->initiativeHolder = initiativeHolder;
         }
@@ -95,7 +99,7 @@ void createEnemies(vector<Enemies>& enemyStatHolder){
     int health;
     int roll;
     int initiativeModifier;
-    int initiative;
+    int initiativeHolder;
     int armorClass;
     string inputs;
     
@@ -110,10 +114,14 @@ void createEnemies(vector<Enemies>& enemyStatHolder){
     cout << "Please enter the enemy intiative modifier" << endl;
     initiativeModifier = inputValidation();
     
+    
+    
+    initiativeHolder = basicD20Roll() + initiativeModifier;
+    
     cout << "Please enter the enemy armorClass" << endl;
     armorClass = inputValidation();
     
-    enemyStatHolder.push_back(Enemies(name,health,initiative,initiativeModifier,armorClass));
+    enemyStatHolder.push_back(Enemies(name,health,armorClass,initiativeModifier,initiativeHolder));
     
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
@@ -276,10 +284,8 @@ while(true){
                   cout << "done! \n";
                   editingParty = false;
                 }
-                
               else if(userInput == 'c'){
                    continue;
-                   
                 }
             }
         }
@@ -287,8 +293,9 @@ while(true){
     else if(selection == 2){
       
       if(playerStatHolder.size() == 0){
+         // clearScreen();
           cout << "The party is currently empty, please press 1 to add" << endl;
-          cout << "\n \n \n \n \n";
+          
       }
       else{
           for(int i = 0; i < playerStatHolder.size(); i++){
@@ -303,19 +310,41 @@ while(true){
     }
     
     else if(selection == 3){
+        bool editingEnemies = true;
         if(enemyStatHolder.size() == 0){
+          //  clearScreen();
             cout << "There are no enemies in this list, beginning list" << endl;
+            
         }
-        
+        while(editingEnemies){
+            cout << "Enter in enemy info, press d when prompted if done" << endl;
+            createEnemies(enemyStatHolder);
+        char userInput = inputCharValidation();
+            if(userInput == 'd'){
+                cout << "done! \n";
+                editingEnemies = false;
+            }
+            else if(userInput == 'c'){
+                continue;
+            }
+        }
         
     }
     
     else if(selection == 4){
         if(enemyStatHolder.size() == 0){
+            //clearScreen();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             cout << "There are no enemies in this list" << endl;
         }
         else if(enemyStatHolder.size() > 0){
-            //insert edit code here
+            for(int i = 0; i < enemyStatHolder.size(); i++){
+                cout << "\n";
+                cout << "Name: " << enemyStatHolder.at(i).getName() << endl;
+                cout << "Health: " << enemyStatHolder.at(i).getHealth() << endl;
+                cout << "Initiative: " << enemyStatHolder.at(i).getInitiativeHolder() << endl;
+                cout << "Armor class: " << enemyStatHolder.at(i).getArmorClass() << endl << endl;
+            }
         }
     }
     
